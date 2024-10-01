@@ -1,126 +1,37 @@
-import { Text, View, FlatList, ListRenderItem, Button } from 'react-native';
-import { Card, cards } from '@/api/data.mock';
-import { CardComponent } from '@/components/molecules/cardComponent/cardComponent.molecule';
-import { useState } from 'react';
+import { Text, View } from 'react-native';
 import { ButtonComponent } from '@/components/atoms/button/button.atom';
-import { SafeAreaView, StyleSheet, TextInput } from 'react-native';
+import { useState } from 'react';
+import { TextInputComponent } from '@/components/atoms/textInput/textInput.atom';
 
 export default function Index() {
-  const [counter, setCounter] = useState(0);
-  const [tempform, setTempForm] = useState('');
-  const [form, setForm] = useState('');
+  const [text, setText] = useState('');
+  const [isConfirmPressed, setIsConfirmPressed] = useState(false);
 
-  // CALLBACKS //
-
-  const onPressCounter = () => {
-    setCounter((prevState) => {
-      return prevState + 1;
-    });
+  // ** CALLBACKS  ** //
+  const onChangeText = (text: string) => setText(text);
+  const onPress = () => {
+    setIsConfirmPressed(true);
   };
 
-  const onPressPrintForm = () => {
-    setForm(tempform);
+  const onReset = () => {
+    setText('');
+    setIsConfirmPressed(false);
   };
 
-  const onPressResetForm = () => {
-    setForm('');
-  };
-
-  // UI //
-  const renderItem: ListRenderItem<Card> = ({ item, index }) => {
-    return (
-      <CardComponent
-        key={index}
-        title={item.title}
-        subTitle={item.subTitle}
-        backgroundColor={item.backgroundColor}
-        image={item.image}
-      />
-    );
-  };
-  const ItemSeparatorComponent = () => <View style={{ height: 16 }} />;
-  const ListHeaderComponent = () => {
-    return (
-      <Text style={{ fontSize: 24, paddingVertical: 16, textAlign: 'center' }}>
-        Le card di oggi:{' '}
-      </Text>
-    );
-  };
-  const ListFooterComponent = () => {
-    return (
-      <Text style={{ fontSize: 24, paddingVertical: 16, textAlign: 'center' }}>
-        Fine della lista
-      </Text>
-    );
-  };
-
-  const ListEmptyComponent = () => {
-    return (
-      <Text style={{ fontSize: 24, paddingVertical: 16, textAlign: 'center' }}>
-        Nessuna card da mostrare
-      </Text>
-    );
-  };
-
+  // ** UI  ** //
   return (
-    /*
-    <FlatList
-      style={{ flex: 1 }}
-      bounces={false}
-      data={cards}
-      renderItem={renderItem}
-      ItemSeparatorComponent={ItemSeparatorComponent}
-      ListHeaderComponent={ListHeaderComponent}
-      ListFooterComponent={ListFooterComponent}
-      ListEmptyComponent={ListEmptyComponent}
-    /n>
-    */
-
-    <View
-      style={{
-        padding: 20,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 10,
-        alignContent: 'center',
-        justifyContent: 'center',
-      }}>
-      <SafeAreaView>
-        <TextInput
-          style={styles.input}
-          placeholder="placeholder"
-          onChangeText={(text: string) => setTempForm(text)}
-        />
-      </SafeAreaView>
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          marginBottom: 15,
-          color: '#333',
-        }}>
-        Testo: {form}
-      </Text>
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <TextInputComponent value={text} onChangeText={onChangeText} />
+      {isConfirmPressed ? (
+        <Text style={{ fontSize: 18, paddingVertical: 32, textAlign: 'center' }}>{text}</Text>
+      ) : null}
+      <Text style={{ fontSize: 18, paddingVertical: 32, textAlign: 'center' }}></Text>
+      <ButtonComponent title="Cliccami" onPress={onPress} />
       <ButtonComponent
-        title="Invia"
-        onPress={onPressPrintForm}
-        disabled={false}
-        style={{ margin: 20, alignContent: 'center' }}
-      />
-      <ButtonComponent
+        style={{ marginTop: 16, backgroundColor: 'red' }}
         title="Reset"
-        onPress={onPressResetForm}
-        disabled={false}
-        style={{ backgroundColor: 'red' }}
+        onPress={onReset}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-});

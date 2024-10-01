@@ -4,7 +4,7 @@ import { styles } from '@/components/atoms/button/button.styles';
 
 interface ButtonProps {
   title: string;
-  disabled: boolean;
+  disabled?: boolean;
   style?: ViewStyle;
   titleStyle?: TextStyle;
   activeOpacity?: number;
