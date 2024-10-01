@@ -1,7 +1,33 @@
-import { Text, View, FlatList, ListRenderItem } from "react-native";
+import { Text, View, FlatList, ListRenderItem, Button } from "react-native";
 import { Card, cards } from "@/api/data.mock";
 import { CardComponent } from "@/components/molecules/cardComponent/cardComponent.molecule";
+import { useState } from 'react';
+import { ButtonComponent } from "@/components/atoms/button/button.atom";
+import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
 
+export default function Index() {
+const [counter, setCounter] = useState(0);
+const [tempform, setTempForm] = useState("");
+const [form, setForm] = useState("");
+
+// CALLBACKS //
+
+const onPressCounter = () => {
+  setCounter((prevState) => {
+    return prevState + 1;
+  })
+};
+
+
+const onPressPrintForm = () => {
+  setForm(tempform);
+}
+
+const onPressResetForm = () => {
+  setForm("");
+}
+
+// UI //
 const renderItem: ListRenderItem<Card> = ({ item, index }) => {
   return (
     <CardComponent
@@ -37,8 +63,8 @@ const ListEmptyComponent = () => {
   );
 };
 
-export default function Index() {
   return (
+    /*
     <FlatList
       style={{ flex: 1 }}
       bounces={false}
@@ -48,6 +74,49 @@ export default function Index() {
       ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={ListFooterComponent}
       ListEmptyComponent={ListEmptyComponent}
-    />
+    /n>
+    */
+
+    <View style={{
+      padding: 20,
+      backgroundColor: '#f5f5f5',
+      borderRadius: 10,
+      alignContent:"center",
+      justifyContent:"center"
+    }}>
+      <SafeAreaView>
+        <TextInput
+          style={styles.input}
+          placeholder="placeholder"
+          onChangeText={(text: string) => setTempForm(text)}
+        />
+      </SafeAreaView>
+      <Text style={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        color: '#333',
+      }}>Testo che hai scritto: {form}</Text>
+      <ButtonComponent 
+        title="Invia" 
+        onPress={onPressPrintForm} 
+        disabled={false}
+        style={{margin: 20, alignContent:"center"}}
+      />
+      <ButtonComponent 
+        title="Reset" 
+        onPress={onPressResetForm} 
+        disabled={false}
+      />
+    </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+});
